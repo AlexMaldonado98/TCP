@@ -1,0 +1,36 @@
+
+
+titulo de la prueba-cuando se conecta- o se selecciona la prueba
+"TI;M.100M-STREET-------.QFNL.000001--;TP;"
+
+relacion de competidores
+17:25 13/06/2023"TDT;044;Nadia SANCHEZ;MAD;;"
+"TDT;057;Siets GOIKOETXEA;NAV;;"
+
+cuando se elige a un atleta: 1º titulo.2º tiempo si tubiese. 3º hombre m/c y dorsal
+"TI;-PRUEBA CONTRA RELOJ M/C.-;TP;"
+"TDM;01;02:00.500 ;" -TIEMPO META
+TDC -TIEMPO CONTRAMETA
+"TI;Nadia SANCHEZ;DM;044-bib;" TIEMPO INTERMEDIO
+
+borrar un tiempo de meta/contra. borrar y la posicion
+"CLTM;1;00:02.500"
+
+tiempo de llegada de meta -Clave, vuelta, tiempo
+"TDM;1;02:00.500;" TIEMPO DE META
+"TDT;044;Nadia SANCHEZ;MAD;04:02:00.500;"
+"TDC;1;00:03.400;" TIEMPO DE META
+"TDT;055;Alex MALDONADO;MEX;04:03:00.400;"
+
+tiempo de salida
+"TSA04:00:00.000"
+bib
+--------time line (PARA SIMULAR UN EVENTO EN VIVO)------------
+TI;Nadia SANCHEZ;DM;010;
+TI;Nadia SANCHEZ;CM;013;
+TSA04:00:00.000
+TDT;010;Valery RAMIREZ;MAD;01:10.500;
+TDT;013;Adriana CANTILLO;MEX;01:30.123;
+CLM
+CLC
+
