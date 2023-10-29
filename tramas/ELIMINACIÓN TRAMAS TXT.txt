@@ -13,4 +13,3 @@ RE;4º;64;VARGAS, Adriana;CAT;E-4;;
 RE;5º;41;CARMONA, Naia;MAD;E-3;;
 RE;6º;51;RODRIGUEZ, Lucia;CVA;E-2;;
 RE;7º;43;MOLES, Maria Paloma;MAD;E-1;;
-

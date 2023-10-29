@@ -1,7 +1,3 @@
-/* Este servidor esta pensado para mandar archivos json segun el puerto de ejecución del servidor
-8887 meta contra meta o 8888 Eliminacion cada 5seg manda una trama de tipo JSON */
-//Solo puede mantener una sesion activa
-
 const net = require('net');
 const readline = require('readline');
 const fs = require('fs');
@@ -17,42 +13,42 @@ const rl = readline.createInterface({
 rl.setPrompt('>> ');
 
 const server = net.createServer(socket => {
-  console.log('Cliente conectado');
-  
-  // Setea el socket actual
-  currentSocket = socket;
+    console.log('Cliente conectado');
 
-  rl.prompt();
+    currentSocket = socket;
 
-  socket.on('data', data => {
-    const receivedData = data.toString().trim();
-    console.log(`Datos recibidos del cliente: ${receivedData}`);
-  });
+    rl.prompt();
 
-  socket.on('close', () => {
-    console.log('Cliente desconectado');
-    currentSocket = null;
-  });
+    socket.on('data', data => {
+        const receivedData = data.toString().trim();
+        console.log(`Datos recibidos del cliente: ${receivedData}`);
+    });
 
-  socket.on('error', err => {
-    console.log('Error en la conexión:', err.message);
-  });
+    socket.on('close', () => {
+        console.log('Cliente desconectado');
+        currentSocket = null;
+    });
+
+    socket.on('error', err => {
+        console.log('Error en la conexión:', err.message);
+    });
 });
 
 const rutas = {
-  8887: 'tramas/mcm',
-  8888: 'tramas/elim',
+    // 8887: 'tramas2/5000M_1000M_TEST',
+    8887: 'tramas2/Elimination_TEST',
+    8888: 'tramas2/elim',
 }
 
 rl.on('line', line => {
-    if (currentSocket) { 
+    if (currentSocket) {
         if (line.trim() === 'enviar') {
             let directoryPath;
-        
-            directoryPath = path.join(__dirname, rutas[port])
+
+            directoryPath = path.join(__dirname, rutas[port]);
             if(!directoryPath){
-              console.log('Puerto desconocido')
-              return
+                console.log('Puerto desconocido');
+                return;
             }
 
             fs.readdir(directoryPath, (err, files) => {
@@ -63,19 +59,29 @@ rl.on('line', line => {
 
                 const jsonFiles = files.filter(file => path.extname(file) === '.json');
 
+                jsonFiles.sort((a, b) => {
+                    const [yearA, monthA, dayA, hourA, minA, secA, millisA] = a.split('-').map(num => parseInt(num, 10));
+                    const [yearB, monthB, dayB, hourB, minB, secB, millisB] = b.split('-').map(num => parseInt(num, 10));
+                    const dateA = new Date(yearA, monthA - 1, dayA, hourA, minA, secA, millisA);
+                    const dateB = new Date(yearB, monthB - 1, dayB, hourB, minB, secB, millisB);
+                    return dateA - dateB;
+                });
+
                 let index = 0;
                 const sendFile = () => {
                     if (index < jsonFiles.length) {
-                        const jsonFile = jsonFiles[index];
-                        fs.readFile(path.join(directoryPath, jsonFile), 'utf-8', (err, data) => {
+                        const filePath = path.join(directoryPath, jsonFiles[index]);
+
+                        fs.readFile(filePath, 'utf-8', (err, file) => {
                             if (err) {
-                                console.error(`Error al leer el archivo ${jsonFile}:`, err.message);
+                                console.error(`Error al leer el archivo ${filePath}:`, err.message);
                                 return;
                             }
-                            currentSocket.write(data, 'utf-8', () => {
-                                console.log(`Archivo ${jsonFile} enviado!`);
+
+                            currentSocket.write(file, 'utf-8', () => {
+                                console.log(`Archivo ${filePath} enviado`);
                                 index++;
-                                setTimeout(sendFile, 5000);
+                                setTimeout(sendFile, 4000);
                             });
                         });
                     }
@@ -90,6 +96,5 @@ rl.on('line', line => {
 
 const port = process.argv[2] || 8887;
 server.listen(port, () => {
-  console.log(`Servidor TCP escuchando en el puerto ${port}`);
+    console.log(`Servidor TCP escuchando en el puerto ${port}`);
 });
-
